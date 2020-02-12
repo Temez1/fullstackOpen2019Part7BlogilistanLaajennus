@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { connect } from "react-redux"
 
 import blogService from "./services/blogs"
 import loginService from "./services/login"
@@ -11,12 +12,13 @@ import Togglable from "./components/Togglable"
 
 import useField from "./hooks/index"
 
-const App = () => {
+import { newNotification } from "./reducers/notificiationReducer"
+
+const App = (props) => {
   const [blogs, setBlogs] = useState([])
   const blogTitle = useField("text")
   const username = useField("text")
   const password = useField("password")
-  const [notificationMessage, setNotificationMessage] = useState(null)
   const [notificationStyle, setNotificationStyle] = useState("default")
   const [user, setUser] = useState(null)
 
@@ -36,18 +38,6 @@ const App = () => {
     }
   }, [])
 
-  const newNotification = (message, style, timeoutInMilliseconds=5000) => {
-    setNotificationStyle(style)
-    setNotificationMessage(message)
-    setMessageTimeout(setNotificationMessage, timeoutInMilliseconds)
-  }
-
-  const setMessageTimeout = (messageHandler, timeoutInMilliseconds=5000) => {
-    setTimeout( () => {
-      messageHandler(null)
-    }, timeoutInMilliseconds)
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -59,9 +49,9 @@ const App = () => {
       setUser(user)
       username.reset()
       password.reset()
-      newNotification("Logged in !", "success")
+      props.newNotification("Logged in !")
     } catch (exception) {
-      newNotification("wrong credentials", "fail")
+      newNotification("wrong credentials")
     }
   }
 
@@ -91,7 +81,7 @@ const App = () => {
     <div>
       <h1>Blogs</h1>
 
-      {notificationMessage !== null && <Notification messageState={notificationMessage} styleState={notificationStyle} />}
+      <Notification/>
 
       <h2>Login</h2>
 
@@ -119,4 +109,4 @@ const App = () => {
   )
 }
 
-export default App
+export default connect(null, { newNotification })(App)
