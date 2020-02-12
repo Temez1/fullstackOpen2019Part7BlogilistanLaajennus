@@ -19,7 +19,6 @@ const App = (props) => {
   const blogTitle = useField("text")
   const username = useField("text")
   const password = useField("password")
-  const [notificationStyle, setNotificationStyle] = useState("default")
   const [user, setUser] = useState(null)
 
   useEffect(() => {
