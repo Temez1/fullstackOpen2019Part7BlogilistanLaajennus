@@ -1,10 +1,27 @@
 import React from "react"
+import { connect } from "react-redux"
+import { create } from "../reducers/blogsReducer"
+import { newNotification } from "../reducers/notificiationReducer"
 
-const BlogForm = ({ blogFormHandler, blogTitleField }) => {
-  // eslint-disable-next-line no-unused-vars
-  const { reset, ...rest } = blogTitleField
+const BlogForm = (props) => {
+
+  const addBlog = (event) => {
+    event.preventDefault()
+    const noteObject = {
+      title: props.blogTitleField.value,
+      author: "test",
+      url: "test.fi",
+    }
+    props.create(noteObject)
+    props.blogTitleField.reset()
+    props.newNotification("Added new blog!")
+  }
+
+  // Object destructing to get everything but reset property
+  const { reset, ...rest } = props.blogTitleField
+
   return(
-    <form onSubmit={blogFormHandler}>
+    <form onSubmit={addBlog}>
       <div>
           title
         <input {...rest} />
@@ -14,5 +31,12 @@ const BlogForm = ({ blogFormHandler, blogTitleField }) => {
   )
 }
 
+const mapDispatchToProps = {
+  create,
+  newNotification,
+}
 
-export default BlogForm
+export default connect(
+  null,
+  mapDispatchToProps
+)(BlogForm)
