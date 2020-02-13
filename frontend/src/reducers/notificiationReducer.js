@@ -1,10 +1,4 @@
-const initialState = {
-  message: null,
-  style:"default"
-}
-
-const notificationReducer = (state=initialState, action) => {
-  console.log(action)
+const notificationReducer = (state=null, action) => {
   switch (action.type) {
     case "NEW_NOTIFICATION":
       return action.notification
@@ -16,30 +10,22 @@ const notificationReducer = (state=initialState, action) => {
   }
 }
 
-export const newNotification = (message, style="default", timeout=5) => {
+export const newNotification = (message, timeout=5) => {
   return async dispatch => {
     setTimeout(() => dispatch(clearNotification()), timeout * 1000)
-    const styled = pickStyle(style)
     dispatch({
       type:"NEW_NOTIFICATION",
-      notification: {
-        message: message,
-        style: styled
-      }
+      notification: message
     })
   }
 }
 
-const clearNotification = () => {
-  return {
+const clearNotification = () => (
+  {
     type: "CLEAR_MESSAGE",
-    notification: {
-      message: null,
-      style: state.style
+    notification: null
   }
-}
+)
 
-const pickStyle = (style) => {
 
-}
 export default notificationReducer

@@ -50,13 +50,13 @@ const App = (props) => {
       password.reset()
       props.newNotification("Logged in !")
     } catch (exception) {
-      newNotification("wrong credentials")
+      props.newNotification("wrong credentials")
     }
   }
 
   const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogappUser")
-    newNotification("Logged out!", "success")
+    props.newNotification("Logged out!")
   }
 
   const addBlog = (event) => {
@@ -73,7 +73,7 @@ const App = (props) => {
         setBlogs(blogs.concat(data))
         blogTitle.reset()
       })
-    newNotification("Added new blog!", "success")
+    props.newNotification("Added new blog!")
   }
 
   return (
