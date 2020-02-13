@@ -13,6 +13,7 @@ import Togglable from "./components/Togglable"
 import useField from "./hooks/index"
 
 import { newNotification } from "./reducers/notificiationReducer"
+import { initalizeBlogs } from "./reducers/blogsReducer"
 
 const App = (props) => {
   const [blogs, setBlogs] = useState([])
@@ -22,10 +23,7 @@ const App = (props) => {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    blogService
-      .getAll().then(initialBlogs => {
-        setBlogs(initialBlogs)
-      })
+    props.initalizeBlogs()
   }, [])
 
   useEffect(() => {
@@ -75,7 +73,7 @@ const App = (props) => {
       })
     props.newNotification("Added new blog!")
   }
-
+  console.log(props)
   return (
     <div>
       <h1>Blogs</h1>
@@ -103,9 +101,9 @@ const App = (props) => {
           <button onClick={handleLogout}>logout</button>
         </div>
       }
-      {blogs.map(blog => <Blog blog = { blog } key={blog.id}/>)}
+      {props.blogs.map(blog => <Blog blog = { blog } key={blog.id}/>)}
     </div>
   )
 }
 
-export default connect(null, { newNotification })(App)
+export default connect(null, { newNotification, initalizeBlogs })(App)
