@@ -34,23 +34,6 @@ const App = (props) => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    try {
-      const user = await loginService.login({ username:username.value, password:password.value })
-
-      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user))
-
-      blogService.setToken(user.token)
-      setUser(user)
-      username.reset()
-      password.reset()
-      props.newNotification("Logged in !")
-    } catch (exception) {
-      props.newNotification("wrong credentials")
-    }
-  }
-
   const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogappUser")
     props.newNotification("Logged out!")
@@ -67,7 +50,6 @@ const App = (props) => {
       { user === null
         ? <Togglable buttonLabel="login">
           <LoginForm
-            loginHandler={handleLogin}
             usernameField={username}
             passwordField={password}
           />
