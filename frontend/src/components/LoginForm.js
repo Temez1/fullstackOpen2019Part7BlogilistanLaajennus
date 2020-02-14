@@ -1,30 +1,33 @@
 /* eslint-disable no-unused-vars */
 import React from "react"
-import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import { setUser } from "../reducers/userReducer"
+import { newNotification } from "../reducers/notificiationReducer"
+
+import loginService from "../services/login"
+import blogService from "../services/blogs"
 
 const LoginForm = ( props ) => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({ username:username.value, password:password.value })
+      const user = await loginService.login({ username:props.usernameField.value, password:props.passwordField.value })
 
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user))
 
       blogService.setToken(user.token)
       props.setUser(user)
-      username.reset()
-      password.reset()
+      props.usernameField.reset()
+      props.passwordField.reset()
       props.newNotification("Logged in !")
     } catch (exception) {
       props.newNotification("wrong credentials")
     }
   }
 
-  const { reset: resetName, ...restOfName } = usernameField
-  const { reset: resetPassword, ...restOfPassword } = passwordField
+  const { reset: resetName, ...restOfName } = props.usernameField
+  const { reset: resetPassword, ...restOfPassword } = props.passwordField
   
   return(
     <form onSubmit={handleLogin}>
@@ -42,15 +45,9 @@ const LoginForm = ( props ) => {
 }
 
 const mapDispatchToProps = {
-  create,
+  setUser,
   newNotification,
 }
-
-LoginForm.propTypes = {
-  loginHandler: PropTypes.func.isRequired,
-}
-
-
 
 export default connect(
   null,
