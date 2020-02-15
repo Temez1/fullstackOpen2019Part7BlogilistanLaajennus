@@ -13,7 +13,6 @@ const LoginForm = ( props ) => {
     event.preventDefault()
     try {
       const user = await loginService.login({ username:props.usernameField.value, password:props.passwordField.value })
-
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user))
 
       blogService.setToken(user.token)
@@ -30,17 +29,19 @@ const LoginForm = ( props ) => {
   const { reset: resetPassword, ...restOfPassword } = props.passwordField
   
   return(
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input {...restOfName} name="username"/>
-      </div>
-      <div>
-        password
-        <input {...restOfPassword} name="password"/>
-      </div>
-      <button type="submit">login</button>
-    </form>
+    <div>
+      <form onSubmit={handleLogin}>
+        <div>
+          username
+          <input {...restOfName} name="username"/>
+        </div>
+        <div>
+          password
+          <input {...restOfPassword} name="password"/>
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </div>
   )
 }
 

@@ -1,5 +1,9 @@
-import React, { useState, useEffect } from "react"
+import React, {useEffect } from "react"
 import { connect } from "react-redux"
+import {
+  BrowserRouter as Router,
+  Route, Link
+} from "react-router-dom"
 
 import blogService from "./services/blogs"
 
@@ -8,10 +12,9 @@ import Notification from "./components/Notification"
 import LoginForm from "./components/LoginForm"
 import BlogForm from "./components/BlogForm"
 import Togglable from "./components/Togglable"
-
+import LogoutButton from "./components/LogoutButton"
 import useField from "./hooks/index"
 
-import { newNotification } from "./reducers/notificiationReducer"
 import { initalizeBlogs } from "./reducers/blogsReducer"
 import { setUser } from "./reducers/userReducer"
 
@@ -32,36 +35,41 @@ const App = (props) => {
       blogService.setToken(user.token)
     }
   }, [])
-
-  const handleLogout = () => {
-    window.localStorage.removeItem("loggedBlogappUser")
-    props.newNotification("Logged out!")
-  }
-  console.log(props)
+  
   return (
     <div>
-      <h1>Blogs</h1>
+      <Router>
+        <h1>Blogs</h1>
 
-      <Notification/>
+        <Notification/>
+        <Route exact path="/" render={() => 
+        { return (
+          <div>
+            { props.user === null
+              ? 
+              <div>
+                <h2>Login</h2>
+                <Togglable buttonLabel="login">
+                  <LoginForm
+                    usernameField={username}
+                    passwordField={password}
+                  />
+                </Togglable>
+              </div>
+              : 
+              <div>
+                <p> {props.user.name} logged in</p>
+                <Togglable buttonLabel="New blog">
+                  <BlogForm blogTitleField={blogTitle} />
+                </Togglable>
+                <LogoutButton />
+              </div>
+            }
+            <BlogList />
+          </div>
+        )}} /> 
 
-      <h2>Login</h2>
-
-      { props.user === null
-        ? <Togglable buttonLabel="login">
-          <LoginForm
-            usernameField={username}
-            passwordField={password}
-          />
-        </Togglable>
-        : <div>
-          <p> {props.user.name} logged in</p>
-          <Togglable buttonLabel="New blog">
-            <BlogForm blogTitleField={blogTitle} />
-          </Togglable>
-          <button onClick={handleLogout}>logout</button>
-        </div>
-      }
-      <BlogList />
+      </Router>
     </div>
   )
 }
@@ -73,4 +81,4 @@ const mapStateToProps = (state) => (
 )
 
 
-export default connect(mapStateToProps, { newNotification, initalizeBlogs, setUser })(App)
+export default connect(mapStateToProps, { initalizeBlogs, setUser })(App)
