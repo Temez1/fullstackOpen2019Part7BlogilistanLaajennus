@@ -9,6 +9,7 @@ import Notification from "./components/Notification"
 import useField from "./hooks/index"
 
 import HomePage from "./pages/Home"
+import UsersPage from "./pages/Users"
 
 import { initalizeBlogs } from "./reducers/blogsReducer"
 import { setUserFromLocalStorage } from "./reducers/userReducer"
@@ -34,6 +35,7 @@ const App = (props) => {
         <Notification/>
         <Route exact path="/" render={ () => <HomePage blogTitle={blogTitle} username={username} password={password} />} /> 
 
+        <Route exact path="/users" render={ () => <UsersPage /> } />
       </Router>
     </div>
   )
