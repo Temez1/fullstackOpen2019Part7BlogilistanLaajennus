@@ -13,6 +13,7 @@ import UsersPage from "./pages/Users"
 
 import { initalizeBlogs } from "./reducers/blogsReducer"
 import { setUserFromLocalStorage } from "./reducers/userReducer"
+import { initalizeUsers } from "./reducers/usersReducer"
 
 const App = (props) => {
   const blogTitle = useField("text")
@@ -21,6 +22,7 @@ const App = (props) => {
 
   useEffect(() => {
     props.initalizeBlogs()
+    props.initalizeUsers()
   }, [])
 
   useEffect(() => {
@@ -44,4 +46,4 @@ const App = (props) => {
 
 
 
-export default connect(null, { initalizeBlogs, setUserFromLocalStorage })(App)
+export default connect(null, { initalizeBlogs, initalizeUsers, setUserFromLocalStorage })(App)
